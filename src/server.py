@@ -9,8 +9,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from fastrtc import (
-    get_stt_model,
-    get_tts_model,
     get_twilio_turn_credentials,
     Stream,
     ReplyOnPause,
@@ -18,15 +16,11 @@ from fastrtc import (
 
 from model import SessionManager
 from graph import build_graph, memory
+from voice import get_voice_processor
 from config import settings, logger, LANDING_HTML, CURR_DIR, STATIC_DIR
 
 # === Model Initialization ===
-try:
-    stt_model = get_stt_model()
-    tts_model = get_tts_model()
-except Exception as e:
-    logger.exception("Error initializing STT/TTS models: %s", e)
-    raise
+voice_processor = get_voice_processor()
 
 # === Graph Setup ===
 story_graph = build_graph()
@@ -42,8 +36,7 @@ def get_session(session_id: str = "default") -> SessionManager:
 
 def _speak(text: str):
     """Utility to speak text (blocking)."""
-    for chunk in tts_model.stream_tts_sync(text):
-        yield chunk
+    yield from voice_processor.speak(text)
 
 def process_audio_response(audio):
     """
@@ -61,7 +54,7 @@ def process_audio_response(audio):
         # enables reseting interaction
         if session.current_state.get("story_over", False):
             logger.info("Story is over")
-            user_input = stt_model.stt(audio)
+            user_input = voice_processor.speech_to_text(audio)
             logger.debug("STT result: %s", repr(user_input))
             if user_input.lower() in ["new story", "start new story", "start a new story", "new story.", "start new story.", "start a new story.", "start the new story.", "start the new story"]:
                 session.reset()
@@ -83,7 +76,7 @@ def process_audio_response(audio):
         
         # wait until user confirms to continue or start new story
         if not session.started_conversation:
-            user_input = stt_model.stt(audio)
+            user_input = voice_processor.speech_to_text(audio)
             logger.debug("STT result: %s", repr(user_input)[:200])
             if user_input.lower() in ["yes", "okay", "sure", "continue", "yes.", "okay.", "sure.", "continue."]:
                 yield from _speak("Great! Let's continue the story. Just tell me to start!") 
@@ -96,7 +89,7 @@ def process_audio_response(audio):
                 return
         
         # 1. STT
-        user_input = stt_model.stt(audio)
+        user_input = voice_processor.speech_to_text(audio)
         logger.debug("STT result: %s", repr(user_input)[:200])
         if len(user_input.strip()) == 0:
             yield from _speak("I didn't catch that. Please say something.")

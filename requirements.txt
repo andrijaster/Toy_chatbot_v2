@@ -1,5 +1,4 @@
-fastrtc
-fastrtc[vad, stt, tts]
+fastrtc[vad,stt,tts]
 langchain>=0.1.0
 langchain-openai>=0.0.2
 langgraph>=0.0.10
@@ -8,3 +7,5 @@ pydantic-settings>=2.1.0
 fastapi
 uvicorn
 twilio
+gradio
+python-dotenv

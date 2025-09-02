@@ -21,7 +21,7 @@ classifiers = [
 dependencies = [
     "fastrtc",
     "langchain>=0.1.0",
-    "langchain-openai>=0.0.2", 
+    "langchain-openai>=0.0.2",
     "langgraph>=0.0.10",
     "pydantic>=2.5.3",
     "pydantic-settings>=2.1.0",
@@ -29,7 +29,11 @@ dependencies = [
     "uvicorn",
     "twilio",
     "gradio",
-    "python-dotenv"
+    "python-dotenv",
+    "transformers>=4.56.0",
+    "torch>=2.8.0",
+    "kokoro>=0.9.4",
+    "pip>=25.2",
 ]
 
 [project.optional-dependencies]
@@ -37,7 +41,9 @@ dev = [
     "pytest",
     "pytest-asyncio",
     "ruff",
-    "mypy"
+    "mypy",
+    "pyaudio",
+    "numpy"
 ]
 
 [project.urls]
@@ -101,3 +107,10 @@ python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+
+[dependency-groups]
+dev = [
+    "pyaudio>=0.2.14",
+    "pyttsx3>=2.99",
+    "speechrecognition>=3.14.3",
+]
