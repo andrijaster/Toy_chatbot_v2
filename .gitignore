@@ -73,3 +73,9 @@ temp/
 # Gradio
 gradio_cached_examples/
 flagged/
+
+# Claude Code
+CLAUDE.md
+
+# uv
+.venv/
