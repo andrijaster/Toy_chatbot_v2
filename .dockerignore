@@ -1,0 +1,14 @@
+*.log
+
+# Environment & secrets
+.env
+*.pem
+*.key
+
+# Git-related files
+.git
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db

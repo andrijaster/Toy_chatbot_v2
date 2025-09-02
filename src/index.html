@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Real-Time Chat</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+    <div id="error-toast" class="toast"></div>
+    <div class="container">
+        <div class="logo">
+            <h1>ChildBot Real-Time Chat</h1>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages"></div>
+        </div>
+        <div class="controls">
+            <button id="start-button">Start Conversation</button>
+        </div>
+    </div>
+    <audio id="audio-output"></audio>
+
+    <script src="/app.js"></script>
+    <script src="/static/icons.js"></script>
+</body>
+
+</html>

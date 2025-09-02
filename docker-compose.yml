@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    build: .
+    env_file:
+      - .env
+    container_name: toy_fastrtc
+    ports:
+      - "7861:7861"
+      - "7862:7862"
+    environment:
+      ENV: "production"
+    volumes:
+      - ./src:/app/src
