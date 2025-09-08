@@ -3,8 +3,8 @@ from typing import Optional
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    HOST: str = "0.0.0.0"
-    PORT: int = 7861
+    HOST: str = "127.0.0.1"
+    PORT: int = 8000
     SPACE_ID: Optional[str] = None
     DATABASE_URL: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
