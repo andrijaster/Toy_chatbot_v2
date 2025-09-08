@@ -1,9 +1,10 @@
 import asyncio
-import numpy as np
 from dataclasses import dataclass
-from typing import Optional, AsyncGenerator, Generator, Literal
-from numpy.typing import NDArray
+from typing import AsyncGenerator, Generator, Literal, Optional
+
+import numpy as np
 from kokoro import KPipeline
+from numpy.typing import NDArray
 
 KokoroModelName = Literal["hexgrad/Kokoro-82M"]
 

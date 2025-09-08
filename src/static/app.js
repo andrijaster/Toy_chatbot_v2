@@ -1,6 +1,7 @@
 let peerConnection;
 let webrtc_id;
 let isMuted = false;
+let isConnecting = false;
 const audioOutput = document.getElementById('audio-output');
 const startButton = document.getElementById('start-button');
 const chatMessages = document.getElementById('chat-messages');
@@ -111,8 +112,26 @@ async function setupWebRTC() {
     }, 5000);
 
     try {
+        // Check for getUserMedia support with better error handling
+        if (!navigator.mediaDevices) {
+            throw new Error('MediaDevices API not supported. Please use HTTPS or localhost.');
+        }
+        
+        if (!navigator.mediaDevices.getUserMedia) {
+            throw new Error('getUserMedia not supported. Please update your browser or use HTTPS.');
+        }
+
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true
+        }).catch(err => {
+            if (err.name === 'NotAllowedError') {
+                throw new Error('Microphone access denied. Please allow microphone access and try again.');
+            } else if (err.name === 'NotFoundError') {
+                throw new Error('No microphone found. Please connect a microphone and try again.');
+            } else if (err.name === 'NotSecureError' || err.message.includes('secure')) {
+                throw new Error('Connection not secure. Please use HTTPS or access via localhost.');
+            }
+            throw new Error(`Microphone error: ${err.message}`);
         });
 
         setupAudioVisualization(stream);
@@ -196,6 +215,7 @@ async function setupWebRTC() {
         });
     } catch (err) {
         clearTimeout(timeoutId);
+        isConnecting = false;
         console.error('Error setting up WebRTC:', err);
         showError('Failed to establish connection. Please try again.');
         stop();

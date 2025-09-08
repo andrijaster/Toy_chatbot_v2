@@ -18,15 +18,18 @@ from fastrtc import (
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from sst_model.WhisperSTT import WhisperSTT
-from tts_model.kokoro_tts import KokoroTTS, KokoroTTSOptions
+from fastrtc import get_stt_model, get_tts_model
+
+from tts_model.kokoro_tts import KokoroTTSOptions
 
 
 class SimpleDemo:
     def __init__(self):
         print("Loading models...")
-        self.stt_model = WhisperSTT("openai/whisper-medium.en")
-        self.tts_model = KokoroTTS()
+        # self.stt_model = WhisperSTT("openai/whisper-medium.en")
+        self.stt_model = get_stt_model()
+        # self.tts_model = KokoroTTS()
+        self.tts_model = get_tts_model()
         print("Models loaded successfully!")
 
     def response_handler(self, audio: tuple[int, np.ndarray]):
@@ -49,7 +52,8 @@ class SimpleDemo:
         )
 
         print("🔊 Speaking response...")
-        for chunk in self.tts_model.stream_tts_sync(response_text, tts_options):
+        for chunk in self.tts_model.stream_tts_sync(response_text):
+            # for chunk in self.tts_model.stream_tts_sync(response_text, tts_options):
             yield chunk
 
     def run_demo(self):
