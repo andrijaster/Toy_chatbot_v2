@@ -64,6 +64,7 @@ data/*.db
 data/*.sqlite
 data/*.json
 data/*.csv
+.gradio
 
 # Temporary files
 tmp/
